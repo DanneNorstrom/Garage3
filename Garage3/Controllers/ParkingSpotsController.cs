@@ -20,7 +20,7 @@ namespace dbtest3.Controllers
 
         // GET: ParkingSpots
         [Authorize]
-        public async Task<IActionResult> OverView()
+        public async Task<IActionResult> Overview()
         {
             var parkingSpots = await _context.ParkingSpots.
                 Include(ps => ps.Vehicle).
@@ -72,7 +72,7 @@ namespace dbtest3.Controllers
             {
                 _context.ParkingSpots.Add(parkingSpot);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(OverView));
+                return RedirectToAction(nameof(Overview));
             }
             return View(parkingSpot);
         }
@@ -142,7 +142,7 @@ namespace dbtest3.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(OverView));
+                return RedirectToAction(nameof(Overview));
             }
             return View();
         }
@@ -184,7 +184,7 @@ namespace dbtest3.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(OverView));
+            return RedirectToAction(nameof(Overview));
         }
 
         private bool ParkingSpotExists(int id)

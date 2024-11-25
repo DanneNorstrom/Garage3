@@ -16,7 +16,5 @@ namespace Garage3.Data
         public DbSet<Vehicle> Vehicles { get; set; } = default!;
         public DbSet<VehicleType> VehicleTypes { get; set; } = default!;
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<Garage3.Models.PsOverviewModel> PsOverviewModel { get; set; } = default!;
-
     }
 }
