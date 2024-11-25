@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Garage3.Models.PsOverviewModel>
+
+@{
+    ViewData["Title"] = "Overview";
+}
+
+<h1>Overview</h1>
+
+@{
+    if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create">Create new parking spot</a>
+    }
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegNr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParkingTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserFullName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegNr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParkingTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserFullName)
+            </td>
+            <td>
+                    @{
+                        if (User.IsInRole("Member"))
+                        {
+                            if (item.UserFullName.Length == 0)
+                            {
+                                <a asp-action="Park" asp-route-id="@item.Id">Park New Vehicle</a>
+                            }
+
+                            else
+                            {
+                                if (item.UserId == ViewData["curruserid"].ToString())
+                                {
+
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Check out</a>
+                                }
+                            }
+                        }
+                    }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
