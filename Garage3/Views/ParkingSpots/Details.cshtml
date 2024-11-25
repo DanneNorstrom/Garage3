@@ -1,10 +1,8 @@
-﻿@model IEnumerable<Garage3.Models.PsOverviewModel>
+﻿@model IEnumerable<Garage3.Models.PsDetailsViewModel>
 
 @{
-    ViewData["Title"] = "Overview";
+    ViewData["Title"] = "Details";
 }
-
-<h1>Overview</h1>
 
 @{
     if (User.IsInRole("Admin"))
@@ -53,24 +51,20 @@
                 @Html.DisplayFor(modelItem => item.UserFullName)
             </td>
             <td>
-                    @{
-                        if (User.IsInRole("Member"))
-                        {
-                            if (item.UserFullName.Length == 0)
+                @{
+                            if (item.isEmpty)
                             {
                                 <a asp-action="Park" asp-route-id="@item.Id">Park New Vehicle</a>
                             }
 
                             else
                             {
-                                if (item.UserId == ViewData["curruserid"].ToString())
+                                if (item.isCheckoutable)
                                 {
-
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Check out</a>
+                                    <a asp-action="Checkout" asp-route-id="@item.Id">Check out</a>
                                 }
                             }
-                        }
-                    }
+                }
             </td>
         </tr>
 }
