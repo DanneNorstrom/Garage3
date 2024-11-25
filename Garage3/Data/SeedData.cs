@@ -24,20 +24,11 @@ namespace Garage3.Data
 
             await AddRolesAsync(roleNames);
 
-
             var admin = await AddAccountAsync(adminEmail, "Admin", "Adminsson", "19501224-1234", "8Ulven(");
             var user = await AddAccountAsync(userEmail, "User", "Usersson", "19701224-4321", "9Ulven)");
 
-            //var user2 = await AddAccountAsync("daniel@hotmail.com", "Daniel", "Danielsson", "19701224-4321", "1Ulven!");
-            //var user3 = await AddAccountAsync("steven@hotmail.com", "Steven", "Stevensson", "19801224-4729", "3Ulven#");
-
-
-
             await AddUserToRoleAsync(admin, "Admin");
             await AddUserToRoleAsync(user, "Member");
-            //await AddUserToRoleAsync(user2, "Member");
-            //await AddUserToRoleAsync(user3, "Member");
-
         }
 
         private static async Task AddUserToRoleAsync(ApplicationUser user, string roleName)

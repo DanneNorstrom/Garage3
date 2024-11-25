@@ -18,7 +18,5 @@ namespace Garage3.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Garage3.Models.PsOverviewModel> PsOverviewModel { get; set; } = default!;
 
-        //public DbSet<ApplicationUser> User { get; set; } = default!;
-
     }
 }

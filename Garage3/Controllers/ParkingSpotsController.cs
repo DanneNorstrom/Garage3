@@ -20,34 +20,6 @@ namespace dbtest3.Controllers
 
         // GET: ParkingSpots
         [Authorize]
-        public async Task<IActionResult> Index()
-        {
-            var parkingSpots = await _context.ParkingSpots.
-                Include(ps => ps.Vehicle).
-                ThenInclude(ps => ps.VehicleType).
-                //Include(ps => ps.Member).
-                OrderBy(ps => ps.Id).
-                ToListAsync();
-
-            foreach(var p in parkingSpots)
-            {
-                if (p.Vehicle != null)
-                {
-                    var usr = await _userManager.FindByIdAsync(p.UserId);
-                    //p.UserId = usr.Id +" " + usr.FirstName + " " + usr.LastName + " " + p.ParkingTime.ToString() + " " + _userManager.GetUserId(this.User);
-                    p.UserId = usr.Id;
-                    p.Vehicle.VehicleType.Name += " " + usr.FirstName + " " + usr.LastName + " " + p.ParkingTime.ToString();
-                    //p.Vehicle.Owner = usr.PersonNumber + " " + usr.FirstName +" " + usr.LastName;
-                }
-            }
-
-            ViewData["curruserid"] = _userManager.GetUserId(this.User);
-
-            return View(parkingSpots);
-        }
-
-        // GET: ParkingSpots
-        [Authorize]
         public async Task<IActionResult> OverView()
         {
             var parkingSpots = await _context.ParkingSpots.
@@ -56,8 +28,7 @@ namespace dbtest3.Controllers
                 OrderBy(ps => ps.Id).
                 ToListAsync();
 
-            List<PsOverviewModel> parkingSpotsOverView = null!;
-            parkingSpotsOverView = new List<PsOverviewModel>();
+            var parkingSpotsOverView =  new List<PsOverviewModel>();
 
 
             foreach (var p in parkingSpots)
@@ -67,8 +38,6 @@ namespace dbtest3.Controllers
 
                 if (p.Vehicle != null)
                 {
-                    var usr = await _userManager.FindByIdAsync(p.UserId);
-
                     pso.RegNr = p.Vehicle.RegNr;
                     pso.VehicleTypeName = p.Vehicle.VehicleType.Name;
                     pso.ParkingTime = p.ParkingTime.ToString();
@@ -103,7 +72,7 @@ namespace dbtest3.Controllers
             {
                 _context.ParkingSpots.Add(parkingSpot);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(OverView));
             }
             return View(parkingSpot);
         }
@@ -157,12 +126,6 @@ namespace dbtest3.Controllers
                     var userId = _userManager.GetUserId(this.User);
                     ps.UserId = userId;
 
-                    /*ps.Member = new Member
-                    {
-                        Name = pvm.Name
-                    };*/
-
-                    //_context.Members.Add(ps.Member);
                     _context.ParkingSpots.Update(ps);
                     _context.Vehicles.Add(ps.Vehicle);
                     await _context.SaveChangesAsync();
@@ -179,8 +142,7 @@ namespace dbtest3.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-                //return View();
+                return RedirectToAction(nameof(OverView));
             }
             return View();
         }
@@ -210,7 +172,6 @@ namespace dbtest3.Controllers
         {
             var parkingSpot = await _context.ParkingSpots.
                 Include(ps => ps.Vehicle).
-                //Include(ps => ps.Member).
                 FirstOrDefaultAsync(ps => ps.Id == id);
 
             if (parkingSpot != null)
@@ -220,12 +181,10 @@ namespace dbtest3.Controllers
                 _context.ParkingSpots.Update(parkingSpot);
                 parkingSpot.UserId = string.Empty;
                 parkingSpot.ParkingTime = default;
-                //_context.Members.Remove(parkingSpot.Member);
-                //parkingSpot.Member = null;
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(OverView));
         }
 
         private bool ParkingSpotExists(int id)
