@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Garage3.Models.PsDetailsViewModel>
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Index";
 }
 
 @{
@@ -10,6 +10,14 @@
         <a asp-action="Create">Create new parking spot</a>
     }
 }
+
+<form asp-action="Search">
+    <label><b>Enter vehicle type :</b></label>
+    <br>
+    <input type="text" name="vehicletype" />
+    <button type="submit">Search</button>
+    <br>
+</form>
 
 <table class="table">
     <thead>

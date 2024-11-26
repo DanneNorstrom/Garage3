@@ -41,7 +41,7 @@ namespace dbtest3.Controllers
 
         // GET: ParkingSpots
         [Authorize]
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Index()
         {
             var parkingSpots = await _context.ParkingSpots.
                 Include(ps => ps.Vehicle).
@@ -108,7 +108,7 @@ namespace dbtest3.Controllers
             {
                 _context.ParkingSpots.Add(parkingSpot);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction(nameof(Index));
             }
             return View(parkingSpot);
         }
@@ -140,7 +140,7 @@ namespace dbtest3.Controllers
             if (ModelState.IsValid)
             {
                 var ps = new ParkingSpot()
-                {
+                {   
                     Id = pvm.Id,
                     ParkingTime = DateTime.Now
                 };
@@ -178,7 +178,7 @@ namespace dbtest3.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction(nameof(Index));
             }
             return View();
         }
@@ -220,12 +220,29 @@ namespace dbtest3.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details));
+            return RedirectToAction(nameof(Index));
         }
 
         private bool ParkingSpotExists(int id)
         {
             return _context.ParkingSpots.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Search(string vehicleType)
+        { 
+            var psMatches = await _context.ParkingSpots.
+                               
+            OrderBy(ps => ps.Id).
+            Select(ps => new SearchViewModel
+            {
+                Id = ps.Id,
+                RegNr = ps.Vehicle.RegNr,
+                VehicleTypeName = ps.Vehicle.VehicleType.Name
+            }).
+            Where(ps => ps.VehicleTypeName == vehicleType).
+            ToListAsync();
+   
+            return View(psMatches);
         }
     }
 }

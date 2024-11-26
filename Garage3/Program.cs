@@ -47,7 +47,7 @@ namespace Garage3
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=ParkingSpots}/{action=Details}/{id?}");
+                pattern: "{controller=ParkingSpots}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();
